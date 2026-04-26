@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 
 import { playSound } from '../../lib/sounds';
 
-interface CyberButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface CyberButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onAnimationStart' | 'onAnimationEnd' | 'onAnimationIteration' | 'onDragStart' | 'onDragEnd' | 'onDrag'> {
   variant?: 'blue' | 'purple' | 'pink' | 'red';
   glow?: boolean;
 }
