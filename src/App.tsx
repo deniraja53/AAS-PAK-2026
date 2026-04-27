@@ -262,7 +262,7 @@ export default function App() {
           <div className="flex justify-center mb-8">
             <div className="w-24 h-24 flex items-center justify-center p-2">
               <img
-                src="/img/logo.png"
+                src="dist/images/logo.png"
                 alt="School Logo"
                 className="w-full h-full object-contain"
               />
@@ -437,7 +437,7 @@ export default function App() {
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 flex items-center justify-center p-1">
               <img
-                src="/img/logo.png"
+                src="dist/images/logo.png"
                 alt="School Logo"
                 className="w-full h-full object-contain"
               />
@@ -902,7 +902,7 @@ export default function App() {
         >
           <div className="w-32 h-32 mb-8 p-3">
             <img
-              src="/img/logo.png"
+              src="dist/images/logo.png"
               alt="School Logo"
               className="w-full h-full object-contain"
             />
