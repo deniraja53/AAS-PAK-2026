@@ -9,21 +9,29 @@ export const transmitResults = async (session: ExamSession, result: ExamResult) 
     score: result.score,
     totalCorrect: result.correctCount,
     wrongCount: result.wrongCount,
+    essayCount: result.essayCount,
     violations: result.violations,
     answers: JSON.stringify(session.answers),
     timestamp: new Date().toLocaleString('id-ID'),
-    teacherEmail: import.meta.env.VITE_TEACHER_EMAIL // Mengirim target email ke webhook
+    teacherEmail: import.meta.env.VITE_TEACHER_EMAIL
   };
 
-  // Google Sheets Webhook (Recommended)
+  // Google Sheets Webhook via Apps Script
   const webhookUrl = import.meta.env.VITE_GOOGLE_SHEETS_WEBHOOK;
   if (webhookUrl) {
     try {
+      // Gunakan URL query params agar Apps Script bisa membaca data
+      // karena mode 'no-cors' + JSON body tidak bisa dibaca oleh doPost
+      const formData = new URLSearchParams();
+      Object.entries(payload).forEach(([key, value]) => {
+        formData.append(key, String(value ?? ''));
+      });
+
       const response = await fetch(webhookUrl, {
         method: 'POST',
         mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: formData.toString()
       });
       console.log('SATELLITE UPLINK SUCCESSFUL (DATA TRANSMITTED)');
       return true;

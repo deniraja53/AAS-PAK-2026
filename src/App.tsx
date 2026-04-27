@@ -618,7 +618,7 @@ export default function App() {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                           <div className="border border-cyber-blue/30 p-6 bg-cyber-blue/5">
                             <p className="text-cyber-blue/40 text-[9px] uppercase tracking-[0.3em] font-bold mb-4">
-                              Protocol Reference
+                              Pilihlah jawaban yang ada disamping
                             </p>
                             <p className="text-white text-lg font-medium">
                               {q.question}
@@ -902,7 +902,7 @@ export default function App() {
         >
           <div className="w-32 h-32 mb-8 p-3">
             <img
-              src="dist/images/logo.png"
+              src={`${import.meta.env.BASE_URL}images/logo.png`}
               alt="School Logo"
               className="w-full h-full object-contain"
             />
