@@ -3,6 +3,8 @@ import { StudentInfo, ExamResult, ExamSession } from '../types';
 export const transmitResults = async (session: ExamSession, result: ExamResult) => {
   console.log('TRANS-LINK READY. INITIATING UPLINK...', { session, result });
   
+  const teacherEmail = import.meta.env.VITE_TEACHER_EMAIL;
+  
   const payload = {
     studentName: session.student.name,
     school: session.student.school,
@@ -12,35 +14,24 @@ export const transmitResults = async (session: ExamSession, result: ExamResult) 
     essayCount: result.essayCount,
     violations: result.violations,
     answers: JSON.stringify(session.answers),
-    timestamp: new Date().toLocaleString('id-ID'),
-    teacherEmail: import.meta.env.VITE_TEACHER_EMAIL
+    teacherEmail: teacherEmail,
+    timestamp: new Date().toISOString()
   };
 
-  // Google Sheets Webhook via Apps Script
-  const webhookUrl = import.meta.env.VITE_GOOGLE_SHEETS_WEBHOOK;
-  if (webhookUrl) {
-    try {
-      // Gunakan URL query params agar Apps Script bisa membaca data
-      // karena mode 'no-cors' + JSON body tidak bisa dibaca oleh doPost
-      const formData = new URLSearchParams();
-      Object.entries(payload).forEach(([key, value]) => {
-        formData.append(key, String(value ?? ''));
-      });
+  // Call local backend endpoint to handle the transmission (bypasses CORS)
+  try {
+    await fetch('/api/transmit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    console.log('SATELLITE UPLINK SUCCESSFUL');
+  } catch (e) {
+    console.error('UPLINK FAILED', e);
+  }
 
-      const response = await fetch(webhookUrl, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: formData.toString()
-      });
-      console.log('SATELLITE UPLINK SUCCESSFUL (DATA TRANSMITTED)');
-      return true;
-    } catch (e) {
-      console.error('UPLINK ERROR:', e);
-      return false;
-    }
-  } else {
-    console.warn('CRITICAL: Webhook URL not configured. Data stored locally only.');
-    return false;
+  // Optional: Email logic can be logged
+  if (teacherEmail) {
+    console.log(`DATA PACKET ARCHIVED FOR: ${teacherEmail}`);
   }
 };

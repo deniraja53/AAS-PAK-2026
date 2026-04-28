@@ -1,9 +1,10 @@
 import React from 'react';
-import { motion } from 'motion/react';
+import { HTMLMotionProps, motion } from 'motion/react';
 
 import { playSound } from '../../lib/sounds';
 
-interface CyberButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onAnimationStart' | 'onAnimationEnd' | 'onAnimationIteration' | 'onDragStart' | 'onDragEnd' | 'onDrag'> {
+interface CyberButtonProps extends Omit<HTMLMotionProps<"button">, 'children'> {
+  children?: React.ReactNode;
   variant?: 'blue' | 'purple' | 'pink' | 'red';
   glow?: boolean;
 }
